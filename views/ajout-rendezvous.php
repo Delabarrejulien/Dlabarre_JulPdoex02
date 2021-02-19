@@ -4,9 +4,7 @@
 
 
 
-
-
-<select class="form-select" aria-label="Default select example">
+<select class="form-select" aria-label="Default select example" name="idPatients">
   <option selected>Choisir un patient.</option>
   <?php
   foreach($allPatients as $patient){?>
@@ -18,7 +16,7 @@
 </select>
 <br>
 
-<input type="datetime-local" id="date" name="date" class="form-control mb-4">
+<input type="datetime-local" id="dateHour" name="dateHour" class="form-control mb-4">
 
 
 <button type="submit">Valider</button>

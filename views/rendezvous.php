@@ -20,7 +20,7 @@
                         Téléphone : <?= $patient->phone ?> <br></p>
                         Rendez-vous le  : <?= $patient->dateHour ?> <br></p>
 
-                        <a href="/controllers/update-patientCtrl.php?id=<?= $patient->id?>">Modifer</a>
+                        <a href="/controllers/rendezvousCtrl.php?id=<?= $patient->id?>">Modifer</a>
 
                     
                     </div>

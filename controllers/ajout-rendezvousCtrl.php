@@ -11,6 +11,7 @@ $idPatients = null;
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
+
     //Recupérer en post l'idpatients
     $idPatients = intval(trim(filter_input(INPUT_POST, 'idPatients', FILTER_SANITIZE_NUMBER_INT)));
     if($idPatients==0){
@@ -31,11 +32,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }else{
         $errorsArray['dateHour_error'] = 'Le champ date est obligatoire';
     }
-    
+
     if(empty($errorsArray)){
         $appointment = new Appointment($dateHour,$idPatients);
         if($appointment->save()===true){
-            header('location: /rdv-listCtrl.php?');
+            header('location: /controllers/rdv-listCtrl.php?');
         }
     }
 

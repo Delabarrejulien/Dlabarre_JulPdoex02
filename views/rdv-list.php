@@ -18,7 +18,7 @@
             <td><?=htmlentities($appointment->dateHour)?></td>
             <td><?=htmlentities($appointment->lastname)?></td>
             <td><?=htmlentities($appointment->firstname)?></td>
-            <td><a href="/controllers/rendezvousCtrl.php?id=<?=htmlentities($patient->id)?>"><i class="far fa-edit"></i></a></td>
+            <td><a href="/controllers/profil-patientCtrl.php?id=<?=htmlentities($patient->id)?>"><i class="far fa-edit"></i></a></td>
         </tr>
 
     <?php } ?>
