@@ -1,22 +1,20 @@
 <?php
 
-class database{
+require_once dirname(__FILE__).'/../utils/config.php';
 
-    public static function connect(){
+class Database{
 
-        $dsn = 'mysql:host=localhost;dbname=hospitale2n';
-        $user = 'doctor';
-        $mdp = 'zY9JyK18tHlhbmz7';
-        try{$pdo = new PDO($dsn, $user,$mdp); 
-            $pdo ->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $pdo ->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            
+    public static function getInstance(){ // va pouvoir etre appellée par Database::getInstance();
 
-        }catch(PDOException $e){
-
-            echo 'ECHEC:' . $e->getMessage();
+        try{
+            $pdo = new PDO(DSN, LOGIN, PASSWORD);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+            return $pdo;
         }
-        return $pdo;
+        catch(PDOException $e){
+           echo 'erreur de connexion à la BDD : '. $e->getMessage();
+        }
+
     }
 }
-?>

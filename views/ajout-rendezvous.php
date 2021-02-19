@@ -9,7 +9,7 @@
 <select class="form-select" aria-label="Default select example">
   <option selected>Choisir un patient.</option>
   <?php
-  foreach($profil as $patient){?>
+  foreach($allPatients as $patient){?>
 
     <option value="<?=$patient->id?>"> <?=$patient->lastname?> <?=$patient->firstname?></option>
  <?php }

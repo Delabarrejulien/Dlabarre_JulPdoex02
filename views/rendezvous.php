@@ -18,6 +18,7 @@
                         Date de naissance : <?= $patient->birthdate ?> <br>
                         E-mail : <?= $patient->mail ?> <br>
                         Téléphone : <?= $patient->phone ?> <br></p>
+                        Rendez-vous le  : <?= $patient->dateHour ?> <br></p>
 
                         <a href="/controllers/update-patientCtrl.php?id=<?= $patient->id?>">Modifer</a>
 

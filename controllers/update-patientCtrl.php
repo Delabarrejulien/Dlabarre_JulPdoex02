@@ -100,10 +100,10 @@ else{
 if(empty($errorarray)){
 
 $patient = new Patient($name, $surname, $birthday, $email, $phone);
-$update = $patient->updatePatient($name, $surname, $birthday, $email, $phone);
+$update = $patient->update($name, $surname, $birthday, $email, $phone);
 
 if($update===true){
-    header('location: /controllers/list-patientCtrl.php?msgCode=2');
+    header('location: /controllers/liste-patientCtrl.php?msgCode=2');
 }
 
 else{

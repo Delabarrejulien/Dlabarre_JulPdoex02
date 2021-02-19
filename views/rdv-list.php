@@ -1,30 +1,30 @@
 <table class="table">
-
-
   <thead>
     <tr>
-      
-      <th scope="col">dateHour</th>
-      <th scope="col">idPatient</th>
-      <th scope="col">modifier</th>
+      <th scope="col">#</th>
+      <th scope="col">Date et heure</th>
+      <th scope="col">Nom</th>
+      <th scope="col">Prénom</th>
+      <th scope="col">aficher</th>
     </tr>
-
-
   </thead>
   <tbody>
-  <?php foreach($appointed as $appointement) : ?>
-  
-    <tr>
-      
-      <td><?= $appointement->dateHour?></td>
-      <td><?= $appointement->idPatient?></td>
-      
-      <td><a href="/controllers/ajout-rendezvousCtrl.php?id=<?= $patient->id?>">créer un autre rendez-vous</a></td>
-      
-    </tr>
-    
-    
 
-    <?php endforeach ?>
+    <?php 
+    foreach($appointed as $appointment) {
+        ?>
+        <tr>
+            <th scope="row"><?=htmlentities($appointment->idAppointment)?></th>
+            <td><?=htmlentities($appointment->dateHour)?></td>
+            <td><?=htmlentities($appointment->lastname)?></td>
+            <td><?=htmlentities($appointment->firstname)?></td>
+            <td><a href="/controllers/rendezvousCtrl.php?id=<?=htmlentities($patient->id)?>"><i class="far fa-edit"></i></a></td>
+        </tr>
+
+    <?php } ?>
+
+  </tbody>
+</table>
+    
   </tbody>
 </table>

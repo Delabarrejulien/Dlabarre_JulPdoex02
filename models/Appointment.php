@@ -3,59 +3,80 @@ require_once(dirname(__FILE__).'/../utils/database.php');
 
 class Appointment{
 
-    
-    private $_dateHour;
     private $_idPatients;
-    
-
-
+    private $_dateHour;
     private $_pdo;
 
-
-    
-    public function __construct($dateHour = NULL, $idPatients = NULL) {
-
+    public function __construct($dateHour=NULL, $idPatients=NULL){ // Méthode magique appellée automatiquement lors de l'instanciation de la classe (new Appointment)
         $this->_dateHour = $dateHour;
         $this->_idPatients = $idPatients;
-
-        $this->_pdo = database::connect();
+        $this->_pdo = Database::getinstance();
     }
 
+    public function save(){
 
-public function addappointement($id){
-    try{
+        try{
+            $sql = 'INSERT INTO `appointments` (`dateHour`, `idPatients`) 
+                    VALUES (:dateHour, :idPatients);';
+            $stmt = $this->_pdo->prepare($sql);
 
-        $sql = "INSERT INTO `appointments`(`dateHour`, `idPatients`)
-                VALUES ('$this->_dateHour', '$this->_idPatients')";
-    
-        $sth = $this->_pdo->prepare($sql);
+            $stmt->bindValue(':dateHour', $this->_dateHour, PDO::PARAM_STR);
+            $stmt->bindValue(':idPatients', $this->_idPatients, PDO::PARAM_INT);
 
-        $sth->bindValue(':_dateHour',$this->_dateHour,PDO::PARAM_STR);
-            $sth->bindValue(':idPatients',$this->_idPatients,PDO::PARAM_INT);
-            
-            return $sth->execute();
+            return $stmt->execute();
+        }catch(PDOException $e){
+            return false;
+        }
 
     }
-    catch(PDOException $e){
-        return $e->getMessage();
-    }
-}
 
-
-
-public function listAppointement(){
+    public static function getAppointments(){
         
-    try{
-        $sql = 'SELECT * FROM `appointments`;';  
-        $sth = $this->_pdo->query($sql);
+        $pdo = Database::getinstance();
 
-        $appointedList = $sth -> fetchAll();
-
-        return $appointedList;
-    } catch(PDOException $e){
-        echo 'echec : ' . $e->getMessage();
+        try{
+            $sql = 'SELECT  `appointments`.`id` as `idAppointment`, 
+                            `appointments`.`idPatients` as `idPatient`, 
+                            `patients`.`lastname`, 
+                            `patients`.`firstname`, 
+                            `appointments`.`dateHour` 
+                    FROM `appointments`
+                    INNER JOIN `patients` ON `patients`.`id` = `appointments`.`idPatients`
+            ;';
+            $stmt = $pdo->query($sql);
+            return $stmt->fetchAll();
+        } catch(PDOException $e){
+            return false;
+        }
     }
-}
+
+    public static function getPatientAppointments(){
+        
+        $pdo = Database::getinstance();
+
+        try{
+            $sql = 'SELECT  `appointments`.`id` as `idAppointment`, 
+                            `appointments`.`idPatients` as `idPatient`, 
+                            `appointments`.`dateHour` 
+                            `patients`.`lastname`, 
+                            `patients`.`firstname`,
+                            `patients`.`birthdate`,
+                            `patients`.`mail`,
+                            `patients`.`phone`,
+                            
+                    FROM `appointments`
+                    INNER JOIN `patients` ON `patients`.`id` = `appointments`.`idPatients`
+            ;';
+            $stmt = $pdo->query($sql);
+            return $stmt->fetchAll();
+        } catch(PDOException $e){
+            return false;
+        }
+    }
+
+
+
+
 }
 
 ?>

@@ -2,9 +2,7 @@
 
 require_once(dirname(__FILE__).'/../models/Patients.php');
 
-$patient = new Patient();
-
-$listPatients= $patient->listPatient();
+$allPatients = Patient::getAll();
 
 include(dirname(__FILE__).'/../views/templates/header.php');
 

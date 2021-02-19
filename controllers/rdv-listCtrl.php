@@ -1,11 +1,9 @@
 <?php
 
 
-require_once(dirname(__FILE__).'/../models/Appointement.php');
+require_once(dirname(__FILE__).'/../models/Appointment.php');
 
-$appointement = new Appointement();
-
-$appointed = $appointement->listAppointement();
+$appointed = Appointment::getAppointments();
 
 
 

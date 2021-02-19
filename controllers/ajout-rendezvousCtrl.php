@@ -1,42 +1,50 @@
 <?php
-require_once(dirname(__FILE__).'/../models/Patients.php');
-require_once(dirname(__FILE__).'/../models/Appointment.php');
-require_once(dirname(__FILE__).'/../utils/regex.php');
+require_once(dirname(__FILE__) . '/../models/Patients.php');
+require_once(dirname(__FILE__) . '/../models/Appointment.php');
 
-$errorarray=[];
+require_once(dirname(__FILE__) . '/../utils/regex.php');
 
+//Tableau d'objets de tous les patients
+$allPatients = Patient::getAll();
+$errorsArray = [];
+$idPatients = null;
 
-$dateHour=trim(filter_input(INPUT_POST, 'birthday', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
-if(!empty($dateHour)){
-   
-    $testRegex= preg_match(REGEX_DATE,$dateHour);
-    if($testRegex == false){
-        $errorarray['dateHour_error'] = 'not valid';
+    //Recupérer en post l'idpatients
+    $idPatients = intval(trim(filter_input(INPUT_POST, 'idPatients', FILTER_SANITIZE_NUMBER_INT)));
+    if($idPatients==0){
+        $errorsArray['idPatients_error'] = 'Le champ Patient est obligatoire';
     }
-}else{
-    $errorsArray['dateHour_error'] = 'request';
-}
 
-if(empty($errorarray)){
+    //récupérer datehour
+    $dateHour = trim(filter_input(INPUT_POST, 'dateHour', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
 
+    //On test si le champ n'est pas vide
+    if(!empty($dateHour)){
+        // On test la valeur
+        $testRegex = preg_match(REGEXP_DATE_HOUR,$dateHour);
+
+        if($testRegex == false){
+            $errorsArray['dateHour_error'] = 'Le date n\'est pas valide, le format attendu est JJ/MM/AAAA';
+        }
+    }else{
+        $errorsArray['dateHour_error'] = 'Le champ date est obligatoire';
+    }
     
+    if(empty($errorsArray)){
+        $appointment = new Appointment($dateHour,$idPatients);
+        if($appointment->save()===true){
+            header('location: /rdv-listCtrl.php?');
+        }
+    }
 
-    $appointment = new Appointment();
-    $appointed=$appointment->addappointement($id);
 }
 
 
 
-$patient = new Patient();
+include(dirname(__FILE__) . '/../views/templates/header.php');
 
-$profil = $patient->listPatient();
+    include(dirname(__FILE__) . '/../views/ajout-rendezvous.php');
 
-
-
-include(dirname(__FILE__).'/../views/templates/header.php');
-
-include(dirname(__FILE__).'/../views/ajout-rendezvous.php');
-
-include(dirname(__FILE__).'/../views/templates/footer.php');
-?>
+include(dirname(__FILE__) . '/../views/templates/footer.php');

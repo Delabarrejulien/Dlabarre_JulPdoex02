@@ -1,59 +1,72 @@
 <?php
+
 require_once(dirname(__FILE__).'/../utils/database.php');
 
 class Patient{
 
-    
-    private $_lastname;
     private $_firstname;
+    private $_lastname;
     private $_birthdate;
-    private $_mail;
     private $_phone;
-
-
+    private $_mail;
     private $_pdo;
 
-
-    
-    public function __construct($lastname = NULL, $firstname = NULL, $birthdate = NULL, $mail = NULL, $phone = NULL) {
-
+    /**
+     * Méthode magique qui permet d'hydrater notre objet 'patient'
+     * 
+     * @return boolean
+     */
+    public function __construct($lastname=NULL, $firstname=NULL, $birthdate=NULL, $phone=NULL, $mail=NULL){
+        
+        // Hydratation de l'objet contenant la connexion à la BDD
+        
         $this->_lastname = $lastname;
         $this->_firstname = $firstname;
         $this->_birthdate = $birthdate;
-        $this->_mail = $mail;
         $this->_phone = $phone;
-        $this->_pdo = database::connect();
+        $this->_mail = $mail;
+
+        $this->_pdo = Database::getInstance();
     }
 
-    public function addPatient(){
-    try{
+    /**
+     * Méthode qui permet de créer un patient
+     * 
+     * @return boolean
+     */
+    public function create(){
 
-        $sql = "INSERT INTO `patients`(`lastname`, `firstname`, `birthdate`, `mail`, `phone`)
-                VALUES ('$this->_lastname', '$this->_firstname', '$this->_birthdate', '$this->_mail', '$this->_phone')";
-    
-        $sth = $this->_pdo->prepare($sql);
+        try{
+            $sql = 'INSERT INTO `patients` (`lastname`, `firstname`, `birthdate`, `phone`, `mail`) 
+                    VALUES (:lastname, :firstname, :birthdate, :phone, :mail)';
+            $sth = $this->_pdo->prepare($sql);
 
-        $sth->bindValue(':lastname',$this->_lastname,PDO::PARAM_STR);
+            $sth->bindValue(':lastname',$this->_lastname,PDO::PARAM_STR);
             $sth->bindValue(':firstname',$this->_firstname,PDO::PARAM_STR);
             $sth->bindValue(':birthdate',$this->_birthdate,PDO::PARAM_STR);
             $sth->bindValue(':phone',$this->_phone,PDO::PARAM_STR);
             $sth->bindValue(':mail',$this->_mail,PDO::PARAM_STR);
             return $sth->execute();
+        }
+        catch(PDOException $e){
+            return $e->getCode();
+        }
 
     }
-    catch(PDOException $e){
-        return $e->getMessage();
-    }
-    }
 
+    /**
+     * Méthode qui permet de lister tous les patients existants
+     * 
+     * @return array
+     */
     public static function getAll(){
         
-        $pdo = Database::connect();
+        $pdo = Database::getInstance();
 
         try{
             $sql = 'SELECT * FROM `patients`';
-            $sth = $pdo->query($sql);
-            return($sth->fetchAll());
+            $stmt = $pdo->query($sql);
+            return($stmt->fetchAll());
         }
         catch(PDOException $e){
             return false;
@@ -61,9 +74,14 @@ class Patient{
 
     }
 
+    /**
+     * Méthode qui permet de récupérer le profil d'un patient
+     * 
+     * @return object
+     */
     public static function get($id){
         
-        $pdo = Database::connect();
+        $pdo = Database::getInstance();
 
         try{
             $sql = 'SELECT * FROM `patients` WHERE `id` = :id';
@@ -79,77 +97,29 @@ class Patient{
 
     }
 
-    
+    /**
+     * Méthode qui permet de créer un patient
+     * 
+     * @return boolean
+     */
+    public function update($id){
 
-
-
-    public function listPatient(){
-        
         try{
-            $sql = 'SELECT * FROM `patients`;';  
-            $sth = $this->_pdo->query($sql);
-
-            $listPatients = $sth -> fetchAll();
-
-            return $listPatients;
-        } catch(PDOException $e){
-            echo 'echec : ' . $e->getMessage();
+            $sql = 'UPDATE `patients` SET `lastname` = :lastname, `firstname` = :firstname, `birthdate` = :birthdate, `phone` = :phone, `mail` = :mail
+                    WHERE `id` = :id';
+            $sth = $this->_pdo->prepare($sql);
+            $sth->bindValue(':lastname',$this->_lastname,PDO::PARAM_STR);
+            $sth->bindValue(':firstname',$this->_firstname,PDO::PARAM_STR);
+            $sth->bindValue(':birthdate',$this->_birthdate,PDO::PARAM_STR);
+            $sth->bindValue(':phone',$this->_phone,PDO::PARAM_STR);
+            $sth->bindValue(':mail',$this->_mail,PDO::PARAM_STR);
+            $sth->bindValue(':id',$id,PDO::PARAM_INT);
+            return($sth->execute()); 
         }
-    }
-
-    public function profilPatient($id){
-        
-        try{
-            $sql = "SELECT * FROM `patients` WHERE `id` = :id";
-
-            $stmt = $this->_pdo->prepare($sql);
-            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            $profil = $stmt->fetch(PDO::FETCH_OBJ);
-
-            return $profil;
-        }catch(PDOException $e){
-            echo 'echec : ' . $e->getMessage();
-            return false;
+        catch(PDOException $e){
+            return $e->getCode();
         }
 
+    }
+
 }
-
-
-public function updatepatient($id){
-        
-    try{
-        $sql = 'UPDATE `patients` 
-
-        SET `latsname` = :latsname,
-            `firstname` = :firstname,
-            `birthdate` = :birthdate,
-            `phone` = :phone,
-            `mail` = :mail,
-        WHERE `id` = :id';
- 
-        $sth = $this->_pdo->prepare($sql);
-
-        
-        $sth->bindValue(':lastname', $this-> _lastname, PDO::PARAM_STR);
-        $sth->bindValue(':firstname', $this-> _firstname, PDO::PARAM_STR);
-        $sth->bindValue(':birthdate', $this-> _birthdate, PDO::PARAM_STR);
-        $sth->bindValue(':phone', $this-> _phone, PDO::PARAM_STR);
-        $sth->bindValue(':mail',$this->_mail,PDO::PARAM_STR);
-        $sth->bindValue(':id', $id, PDO::PARAM_INT);
-        
-        return($sth->execute());
-
-    }
-    catch(PDOException $e){
-        return $e->getMessage();
-    }
-        
-    }
-}
-
-
-
-     
-
-    ?>
