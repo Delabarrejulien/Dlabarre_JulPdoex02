@@ -87,7 +87,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     
 
     $patient = new Patient($name, $surname, $birthday, $email, $phone);
-    $patient->addPatient();
+    $patient->create();
     }
 
 
