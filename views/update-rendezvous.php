@@ -21,9 +21,10 @@
                         E-mail : <?= $appointed->mail ?> <br>
                         Téléphone : <?= $appointed->phone ?> <br></p>
                         Rendez-vous le  : <?= $appointed->dateHour ?> <br></p>
+                        
+                        <input type="datetime-local" id="dateHour" name="dateHour" class="form-control mb-4">
 
-
-                        <a href="/controllers/update-rendezvousCtrl.php?id=<?= $appointed->idAppointment?>">Modifer</a>
+                        <a href="/controllers/rdv-listCtrl.php?id=<?= $appointed->idAppointment?>">Accepter et modifer</a>
 
                     
                     </div>

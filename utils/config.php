@@ -1,8 +1,8 @@
 <?php
 
 DEFINE('DSN', 'mysql:host=localhost;dbname=hospitale2n');
-DEFINE('LOGIN', 'doctor');
-DEFINE('PASSWORD', 'zY9JyK18tHlhbmz7');
+DEFINE('LOGIN', 'doctor2');
+DEFINE('PASSWORD', 'T5rR0anXClcdS7sC');
 
 $displayMsg = array(
     '0' => ['type' => 'alert-danger', 'msg' => 'Une erreur inconnue s\'est produite'],

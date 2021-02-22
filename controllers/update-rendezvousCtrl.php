@@ -8,6 +8,6 @@ $appointed = Appointment::getPatientAppointments($id);
 
 
 include(dirname(__FILE__) . '/../views/templates/header.php');
-    include(dirname(__FILE__) . '/../views/rendezvous.php');
+    include(dirname(__FILE__) . '/../views/update-rendezvous.php');
 include(dirname(__FILE__) . '/../views/templates/footer.php');
 

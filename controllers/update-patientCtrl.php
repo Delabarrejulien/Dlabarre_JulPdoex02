@@ -5,12 +5,14 @@ require_once(dirname(__FILE__).'/../utils/regex.php');
 require_once(dirname(__FILE__).'/../models/Patients.php');  
 
 $errorarray= array();
+
         
 $id = intval(trim(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
 
+
+
 $patient = new Patient();
 $profil = $patient->get($id);
-
 
 
 
@@ -28,9 +30,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $errorarray['name_error'] = 'not valid';
         }
     }else{
-        $errorsArray['name_error'] = 'request';
+        $errorarray['name_error'] = 'request';
     }
-
 
 
 
@@ -43,7 +44,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $errorarray['surname_error'] = 'not valid';
         }
     }else{
-        $errorsArray['surname_error'] = 'request';
+        $errorarray['surname_error'] = 'request';
     }
 
 
@@ -57,10 +58,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $errorarray['birthday_error'] = 'not valid';
         }
     }else{
-        $errorsArray['birthday_error'] = 'request';
+        $errorarray['birthday_error'] = 'request';
     }
 
 
+    
 
 
 
@@ -73,10 +75,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $errorarray['email_error'] = 'not valid';
         }
     }else{
-        $errorsArray['email_error'] = 'request';
+        $errorarray['email_error'] = 'request';
     }
-
-
+    
 
 
     $phone=trim(filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
@@ -87,51 +88,51 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if($testRegex == false){
             $errorarray['phone_error'] = 'not valid';
         }
-
+    }else{
+        $errorarray['phone_error'] = 'request';
     }
 
-
-     
-else{
-    $errorsArray['phone_error'] = 'request';
-}
+    
+    
 
 
-if(empty($errorarray)){
+    if(empty($errorarray)){
 
-$patient = new Patient($name, $surname, $birthday, $email, $phone);
-$update = $patient->update($name, $surname, $birthday, $email, $phone);
+        $patient = new Patient($name, $surname, $birthday, $email, $phone);
 
-if($update===true){
-    header('location: /controllers/liste-patientCtrl.php?msgCode=2');
-}
-
-else{
-
-    $msgCode=$update;
-
-}
-}
-
-else{
-
-$patient= Patient::get($id);
+        $update = $patient->update($id);
 
 
+      
 
-if($update){
+        if($update===true){
+            header('location: /controllers/liste-patientCtrl.php?msgCode=2');
+        }
 
-    $id = $patient->id;
-    $lastname = $patient->lastname;
-    $firstname = $patient->firstname;
-    $birthdate = $patient->birthdate;
-    $phone = $patient->phone;
-    $mail = $patient->mail;
+    }else{
+
+        $msgCode=$update;
+
+    }
 }else{
-    header('location: /controllers/list-patientCtrl.php?');
+
+    $patient= Patient::get($id);
+
+
+
+    if($patient){
+
+        $id = $patient->id;
+        $lastname = $patient->lastname;
+        $firstname = $patient->firstname;
+        $birthdate = $patient->birthdate;
+        $phone = $patient->phone;
+        $mail = $patient->mail;
+    }else{
+        header('location: /controllers/list-patientCtrl.php?');
+    }
 }
-}
-}
+
 
 
 

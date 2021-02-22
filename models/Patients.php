@@ -98,7 +98,7 @@ class Patient{
     }
 
     /**
-     * Méthode qui permet de créer un patient
+     * Méthode qui permet de modifier un patient
      * 
      * @return boolean
      */

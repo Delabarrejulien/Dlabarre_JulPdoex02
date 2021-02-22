@@ -35,20 +35,17 @@
                 <br>
                 <?= isset($error1)? $error1: '';?>
                 
-             
-                <div class="form-group">
-                <label for="exampleInputEmail1">email</label>
-                <input type="email" class="form-control" name='email' id="email" placeholder="E-mail"  >
-                </div>
-
-                <br>
-
-                <?= isset($error1)? $error1: '';?>
-
                 <label for="exampleInputEmail1">phone</label>
                 <input type="tel" class="form-control" name='phone' id="phone" placeholder="Téléphone"
                 pattern="(01|02|03|04|05|06|07|08|09)[ .-]?[0-9]{2}[ .-]?[0-9]{2}[ .-]?[0-9]{2}[ .-]?[0-9]{2}" required    >
                 
+                <br>
+                <?= isset($error1)? $error1: '';?>
+
+                <div class="form-group">
+                <label for="exampleInputEmail1">email</label>
+                <input type="email" class="form-control" name='email' id="email" placeholder="E-mail"  >
+                </div>
 
                 <?= isset($error1)? $error1: '';?>
                 <br>

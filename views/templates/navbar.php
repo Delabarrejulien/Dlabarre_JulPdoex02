@@ -20,9 +20,7 @@
       <li class="nav-item">
         <a class="nav-link" href="/controllers/rdv-listCtrl.php">Liste de rendez-vous</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/controllers/rendezvousCtrl.php">aff rendez-vous</a>
-      </li>
+     
      
      
     </ul>

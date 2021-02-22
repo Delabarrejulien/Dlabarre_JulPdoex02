@@ -41,8 +41,8 @@ class Appointment{
                             `patients`.`firstname`, 
                             `appointments`.`dateHour` 
                     FROM `appointments`
-                    INNER JOIN `patients` ON `patients`.`id` = `appointments`.`idPatients`
-            ;';
+                    INNER JOIN `patients` ON `patients`.`id` = `appointments`.`idPatients`;';
+                    
             $stmt = $pdo->query($sql);
             return $stmt->fetchAll();
         } catch(PDOException $e){
@@ -50,33 +50,58 @@ class Appointment{
         }
     }
 
-    public static function getPatientAppointments(){
+    public static function getPatientAppointments($id){
         
         $pdo = Database::getinstance();
 
         try{
             $sql = 'SELECT  `appointments`.`id` as `idAppointment`, 
                             `appointments`.`idPatients` as `idPatient`, 
-                            `appointments`.`dateHour` 
+                            `appointments`.`dateHour`, 
                             `patients`.`lastname`, 
                             `patients`.`firstname`,
                             `patients`.`birthdate`,
                             `patients`.`mail`,
-                            `patients`.`phone`,
+                            `patients`.`phone`
                             
                     FROM `appointments`
                     INNER JOIN `patients` ON `patients`.`id` = `appointments`.`idPatients`
-            ;';
-            $stmt = $pdo->query($sql);
-            return $stmt->fetchAll();
+                    WHERE `appointments`.`id`= :id ;';
+                     
+        
+            $stmt = $pdo->prepare($sql);
+            $stmt ->bindValue(':id',$id,PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetch();
+
         } catch(PDOException $e){
             return false;
         }
     }
 
 
+    public function update($id){
 
+        try{
+            $sql = 'UPDATE `appointments` SET `dateHour` = :dateHour
+                    WHERE `id` = :id';
+            $sth = $this->_pdo->prepare($sql);
+            $sth->bindValue(':dateHour',$this->dateHour,PDO::PARAM_STR);
+            $sth->bindValue(':id',$id,PDO::PARAM_INT);
+            return($sth->execute()); 
+        }
+        catch(PDOException $e){
+            return $e->getCode();
+        }
+
+    }
 
 }
+
+
+
+
+
 
 ?>

@@ -52,9 +52,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     }
 
 
+    $phone=trim(filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
 
+    if(!empty($phone)){
 
+        $testRegex= preg_match(REGEX_PHONE,$phone);
+        if($testRegex == false){
+            $errorarray['phone_error'] = 'not valid';
+        }
+    }else{
+        $errorsArray['phone_error'] = 'request';
+    }
 
+    
     $email=trim(filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES));
 
     if(!empty($email)){
@@ -67,26 +77,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $errorsArray['email_error'] = 'request';
     }
 
-
-
-
-    $phone=trim(filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
-
-    if(!empty($phone)){
-
-        $testRegex= preg_match(REGEX_PHONE,$phone);
-        if($testRegex == false){
-            $errorarray['phone_error'] = 'not valid';
-        }
-    }else{
-        $errorsArray['phone_error'] = 'request';
-    }
     
    if(empty($errorarray)){
 
     
 
-    $patient = new Patient($name, $surname, $birthday, $email, $phone);
+    $patient = new Patient($name, $surname, $birthday, $phone, $email );
     $patient->create();
     }
 
