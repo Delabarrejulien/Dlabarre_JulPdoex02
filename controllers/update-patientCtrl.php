@@ -98,7 +98,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     if(empty($errorarray)){
 
-        $patient = new Patient($name, $surname, $birthday, $email, $phone);
+        $patient = new Patient($name, $surname, $birthday, $phone, $email);
 
         $update = $patient->update($id);
 

@@ -6,6 +6,7 @@
       <th scope="col">Nom</th>
       <th scope="col">Prénom</th>
       <th scope="col">aficher</th>
+      <th scope="col">supprimer</th>
     </tr>
   </thead>
   <tbody>
@@ -19,6 +20,7 @@
             <td><?=htmlentities($appointment->lastname)?></td>
             <td><?=htmlentities($appointment->firstname)?></td>
             <td><a href="/controllers/rendezvousCtrl.php?id=<?=htmlentities($appointment->idAppointment)?>"><i class="far fa-edit"></i></a></td>
+            <td><a href="/controllers/deleteRdvCtrl.php?id=<?=htmlentities($appointment->idAppointment)?>"><i class="fas fa-trash"></i></a></td>
         </tr>
 
     <?php } ?>

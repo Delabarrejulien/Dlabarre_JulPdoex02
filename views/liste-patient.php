@@ -15,9 +15,9 @@ if(!empty($msgCode) || $msgCode = trim(filter_input(INPUT_GET, 'msgCode', FILTER
       <th scope="col">Prénom</th>
       <th scope="col">Nom</th>
       <th scope="col">Date de naissance</th>
-      <th scope="col">phone</th>
-      <th scope="col">Email</th>
       <th scope="col">Profil</th>
+      <th scope="col">rendez-vous</th>
+      <th scope="col">effacer</th>
     </tr>
   </thead>
   <tbody>
@@ -32,9 +32,10 @@ if(!empty($msgCode) || $msgCode = trim(filter_input(INPUT_GET, 'msgCode', FILTER
         <td><?=htmlentities($patient->firstname)?></td>
         <td><?=htmlentities($patient->lastname)?></td>
         <td><?=htmlentities($patient->birthdate)?></td>
-        <td><?=htmlentities($patient->phone)?></td>
-        <td><?=htmlentities($patient->mail)?></td>
+       
         <td><a href="/controllers/profil-patientCtrl.php?id=<?=htmlentities($patient->id)?>"><i class="far fa-edit"></i></a></td>
+        <td><a href="/controllers/all-appointments-by-patientCtrl.php?id=<?=htmlentities($patient->id)?>"><i class="far fa-edit"></i></a></td>
+        <td><a href="/controllers/delete-patientCtrl.php?id=<?=htmlentities($patient->id)?>"><i class="fas fa-trash"></i></a></td>
         </tr>
     <?php } ?>
 

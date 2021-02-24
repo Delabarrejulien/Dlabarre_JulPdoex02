@@ -13,6 +13,8 @@ class Appointment{
         $this->_pdo = Database::getinstance();
     }
 
+    //method enregistrer rdv
+
     public function save(){
 
         try{
@@ -29,6 +31,8 @@ class Appointment{
         }
 
     }
+
+    // method affiche les rdv et les patients
 
     public static function getAppointments(){
         
@@ -49,6 +53,8 @@ class Appointment{
             return false;
         }
     }
+
+    //method affiche le rdv et le patient  
 
     public static function getPatientAppointments($id){
         
@@ -80,14 +86,17 @@ class Appointment{
         }
     }
 
+// method qui modifie un rdv pour un patient
+
 
     public function update($id){
 
         try{
-            $sql = 'UPDATE `appointments` SET `dateHour` = :dateHour
+            $sql = 'UPDATE `appointments` SET `dateHour` = :dateHour, `idPatients` = :idPatients
                     WHERE `id` = :id';
             $sth = $this->_pdo->prepare($sql);
-            $sth->bindValue(':dateHour',$this->dateHour,PDO::PARAM_STR);
+            $sth->bindValue(':dateHour',$this->_dateHour,PDO::PARAM_STR);
+            $sth->bindValue(':idPatients',$this->_idPatients,PDO::PARAM_INT);
             $sth->bindValue(':id',$id,PDO::PARAM_INT);
             return($sth->execute()); 
         }
@@ -97,7 +106,63 @@ class Appointment{
 
     }
 
-}
+    //affiche tout les rdv pour un patient
+
+    public static function getAllAppointmentsByPatient($id){
+        
+        $pdo = Database::getinstance();
+
+        try{
+            $sql = 'SELECT  `appointments`.`id` as `idAppointment`, 
+                            `appointments`.`idPatients` as `idPatient`, 
+                            `appointments`.`dateHour`, 
+                            `patients`.`lastname`, 
+                            `patients`.`firstname`,
+                            `patients`.`birthdate`,
+                            `patients`.`mail`,
+                            `patients`.`phone`
+                            
+                    FROM `appointments`
+                    INNER JOIN `patients` ON `patients`.`id` = `appointments`.`idPatients`
+                    WHERE `appointments`.`idPatients`= :id ;';
+                     
+        
+            $stmt = $pdo->prepare($sql);
+            $stmt ->bindValue(':id',$id,PDO::PARAM_INT);
+            $stmt->execute();
+            
+            return $stmt->fetchAll();
+
+        } catch(PDOException $e){
+            return false;
+        }
+     }
+
+      //method effacer rdv
+
+      public function delete($id){
+
+        try{
+            $sql = 'DELETE FROM `appointments`Where id = :id;';
+
+            $stmt = $this->_pdo->prepare($sql);
+
+           
+            $stmt->bindValue(':id',$id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }catch(PDOException $e){
+            return false;
+        }
+    }
+
+        
+
+    }
+
+
+
+
 
 
 

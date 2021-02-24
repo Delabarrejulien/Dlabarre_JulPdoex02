@@ -122,4 +122,20 @@ class Patient{
 
     }
 
+    public function deletepatient($id){
+
+        try{
+            $sql = 'DELETE FROM `patients`Where id = :id;';
+
+            $stmt = $this->_pdo->prepare($sql);
+
+           
+            $stmt->bindValue(':id',$id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }catch(PDOException $e){
+            return false;
+        }
+
+}
 }

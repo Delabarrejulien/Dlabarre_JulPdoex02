@@ -1,12 +1,12 @@
 <?php
-require_once(dirname(__FILE__) . '/../config/regexp.php');
+require_once(dirname(__FILE__) . '/../utils/regex.php');
 
-require_once(dirname(__FILE__) . '/../models/Patient.php');
+require_once(dirname(__FILE__) . '/../models/Appointment.php');
 
 // Initialisation du tableau d'erreurs
 $errorsArray = array();
 /*************************************/
-
+var_dump($errorsArray);
 // Nettoyage de l'id passé en GET dans l'url
 $id = intval(trim(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
 
@@ -39,19 +39,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
     // Si il n'y a pas d'erreurs, on met à jour le patient.
     if(empty($errorsArray) ){    
-        $patient = new Patient($lastname, $firstname, $birthdate, $phone, $mail);
-        $result = $patient->update($id);
+        $appointed = new Appointment($dateHour, $idPatients, $id);
+        $result = $appointed->update($id);
         if($result===true){
-            header('location: /controllers/list-patientCtrl.php?msgCode=2');
+            header('location: /controllers/liste-patientCtrl.php?msgCode=2');
         } else {
             // Si l'enregistrement s'est mal passé, on affiche à nouveau le formulaire de création avec un message d'erreur.
             $msgCode=$result;
         }
     }
 } else {
-    $patient= Patient::get($id);
+    $appointed= Appointment::getAppointments($id);
     // Si le patient n'existe pas, on redirige vers la liste complète avec un code erreur
-    if($patient){
+    if($appointed){
         $id = $patient->id;
         $lastname = $patient->lastname;
         $firstname = $patient->firstname;
@@ -59,7 +59,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $phone = $patient->phone;
         $mail = $patient->mail;
     } else {
-        header('location: /controllers/list-patientCtrl.php?msgCode=3');
+        header('location: /controllers/liste-patientCtrl.php?msgCode=3');
     }
     /*************************************************************/
 }
@@ -67,7 +67,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 /* ************* AFFICHAGE DES VUES **************************/
 
 include(dirname(__FILE__) . '/../views/templates/header.php');
-    include(dirname(__FILE__) . '/../views/patients/form-patient.php');
+    include(dirname(__FILE__) . '/../views/update-patient.php');
 include(dirname(__FILE__) . '/../views/templates/footer.php');
 
 /*************************************************************/
