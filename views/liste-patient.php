@@ -7,6 +7,14 @@ if(!empty($msgCode) || $msgCode = trim(filter_input(INPUT_GET, 'msgCode', FILTER
     echo '<div class="alert '.$displayMsg[$msgCode]['type'].'">'.$displayMsg[$msgCode]['msg'].'</div>';
 } ?>
 <!-- -------------------------------------------- -->
+<br>
+<br>
+
+<form action="" method="GET">
+   <input type="search" name="search" placeholder="Recherche..." />
+   <input type="submit" value="Valider" />
+</form>
+<br>
 
 <table class="table">
   <thead>

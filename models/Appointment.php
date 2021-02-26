@@ -150,7 +150,7 @@ class Appointment{
            
             $stmt->bindValue(':id',$id, PDO::PARAM_INT);
 
-            return $stmt->execute();
+            return $stmt->execute();// return true/false
         }catch(PDOException $e){
             return false;
         }

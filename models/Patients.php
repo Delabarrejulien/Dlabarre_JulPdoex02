@@ -136,6 +136,69 @@ class Patient{
         }catch(PDOException $e){
             return false;
         }
+    }
 
+        public static function searchpatient($search){
+
+                $pdo = Database::getInstance();
+
+            try{ 
+                $sql= " SELECT * FROM `patients` 
+                WHERE `lastname` LIKE  :search OR `firstname` LIKE :search;";
+        
+                $stmt = $pdo->prepare($sql);
+
+                $stmt->bindValue(':search', '%'.$search.'%', PDO::PARAM_STR);
+
+                $stmt->execute();
+                $count =$stmt-> rowcount();
+
+            if($count !=0){
+                $listSearch = $stmt->fetchAll();
+                return $listSearch;
+
+            }else{
+                    return false;
+                }
+
+            }catch(PDOException $e){
+                
+                echo 'erreur de requête: ' . $e->getMessage();
+                return false;
+           }
+        }
+
+        //compte les patients et le nombre de pages pour afficher
+
+        public static function bodyCount_perPage(){
+
+            $pdo = Database::getInstance();
+
+            try{
+
+        // On détermine le nombre total de patients
+            $sql = 'SELECT COUNT(*) AS `nb_patient` FROM `patients`;';
+
+        // On prépare la requête
+            $query = $pdo->prepare($sql);
+
+        // On exécute
+            $query->execute();
+
+        // On récupère le nombre de patients
+            $result = $query->fetch();
+
+            $nbPatient = (int) $result['nb_patient'];
+
+        }catch(PDOException $e){
+                
+            echo 'erreur de requête: ' . $e->getMessage();
+            return false;
+       }
+    }
 }
-}
+    // // On détermine le nombre de patients par page
+            // $parPage = (5);
+
+            // // On calcule le nombre de pages total
+            // $pages = ceil($nbPatient / $parPage);
