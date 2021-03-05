@@ -77,15 +77,20 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $errorsArray['email_error'] = 'request';
     }
 
+    // Si il n'y a pas d'erreurs, on enregistre un nouveau patient.
     
-   if(empty($errorarray)){
-
-    
-
     $patient = new Patient($name, $surname, $birthday, $phone, $email );
-    $patient->create();
+   if(empty($errorarray)){
+      $result = $patient->create();
+
+      if($result===true){
+        header('location: /controllers/liste-patientCtrl.php?msgCode=1');
+    } else {
+        // Si l'enregistrement s'est mal passé, on affiche à nouveau le formulaire de création avec un message d'erreur.
+        $msgCode = $result;
     }
 
+   }
 
 }
 

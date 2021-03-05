@@ -5,28 +5,42 @@ require_once(dirname(__FILE__).'/../models/Patients.php');
 
 $patient = new Patient();
 
-$allPatients = Patient::getAll();
+
+
+
 
 // recherche de patient
+$search = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET' && isset($_GET['search'])) {
 
     $search = trim(filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES));
-    $search = strip_tags($search); 
 
-    $allPatients = Patient::searchPatient($search);
 }
+ //===================================================================
+ 
+ //calcul de la 1er page
 
-//numeroter la page list-patient
+ $currentPage=intval (trim(filter_input(INPUT_GET, 'page', FILTER_SANITIZE_NUMBER_INT)));
 
-if(isset($_GET['page']) && !empty($_GET['page'])){
-    $currentPage = (int) strip_tags($_GET['page']);
-}else{
-    $currentPage = 1;
-}
+ if ($currentPage<=0){
+     $currentPage =1;
+ }
+
+ $limit = 2;
+
+ // Calcul du 1er patient de la page
+
+$offset = $limit *( $currentPage -1);
+
+$totalPatient = Patient ::bodyCountPerPage();
 
 
+// On calcule le nombre de pages total
 
+$pages = ceil($totalPatient->nb_patient / $limit);
+
+$allPatients = Patient::getlimit($search,$offset,$limit);
 
 
 include(dirname(__FILE__).'/../views/templates/header.php');

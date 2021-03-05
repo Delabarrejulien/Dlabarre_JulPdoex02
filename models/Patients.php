@@ -57,7 +57,7 @@ class Patient{
     /**
      * Méthode qui permet de lister tous les patients existants
      * 
-     * @return array
+    
      */
     public static function getAll(){
         
@@ -96,6 +96,8 @@ class Patient{
         }
 
     }
+
+    //==============================================================================================================
 
     /**
      * Méthode qui permet de modifier un patient
@@ -138,6 +140,10 @@ class Patient{
         }
     }
 
+  //=============================================================================================  
+    
+    //recherche de patient
+
         public static function searchpatient($search){
 
                 $pdo = Database::getInstance();
@@ -168,27 +174,27 @@ class Patient{
            }
         }
 
-        //compte les patients et le nombre de pages pour afficher
+//==============================================================================================
 
-        public static function bodyCount_perPage(){
+       // compte le nombre total de patients
+
+        public static function bodyCountPerPage(){
 
             $pdo = Database::getInstance();
 
             try{
 
         // On détermine le nombre total de patients
-            $sql = 'SELECT COUNT(*) AS `nb_patient` FROM `patients`;';
+            $sql = 'SELECT COUNT(*) AS nb_patient FROM `patients`;';
 
         // On prépare la requête
-            $query = $pdo->prepare($sql);
+            $stmt = $pdo->prepare($sql);
+            $stmt -> execute();
+           
 
-        // On exécute
-            $query->execute();
+            return( $stmt->fetch());
 
-        // On récupère le nombre de patients
-            $result = $query->fetch();
-
-            $nbPatient = (int) $result['nb_patient'];
+           
 
         }catch(PDOException $e){
                 
@@ -196,9 +202,32 @@ class Patient{
             return false;
        }
     }
-}
-    // // On détermine le nombre de patients par page
-            // $parPage = (5);
 
-            // // On calcule le nombre de pages total
-            // $pages = ceil($nbPatient / $parPage);
+ 
+
+//===============================================================
+
+       
+     // Méthode qui permet de lister les patients par limite dans une page
+    
+    public static function getlimit($search='',$offset=0,$limit=2){
+        
+        $pdo = Database::getInstance();
+
+        try{
+            $sql = 'SELECT * FROM  `patients` WHERE `lastname` LIKE :search OR `firstname`LIKE :search ORDER BY `lastname` LIMIT :offset, :limit ;';
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':search','%'.$search.'%',PDO::PARAM_STR);
+                $stmt->bindValue(':offset', $offset ,PDO::PARAM_INT);
+                $stmt->bindValue(':limit', $limit ,PDO::PARAM_INT);
+                $stmt->execute();
+                return ($stmt->fetchAll());
+        
+        }
+        catch(PDOException $e){
+            return false;
+        }
+
+    }
+}
+    

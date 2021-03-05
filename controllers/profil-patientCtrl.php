@@ -2,11 +2,11 @@
 require_once(dirname(__FILE__) . '/../models/Patients.php');
 
 // Nettoyage de l'id passé en GET dans l'url
-$id = intval(trim(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
+$idpatient = intval(trim(filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT)));
 /*************************************************************/
 
 // Appel à la méthode statique permettant de récupérer toutes les infos d'un patient
-$patient = Patient::get($id);
+$patient = Patient::get($idpatient);
 /*************************************************************/
 
 // Si le patient n'existe pas, on redirige vers la liste complète avec un code erreur
